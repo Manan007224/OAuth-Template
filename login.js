@@ -1,4 +1,5 @@
 'use strict'
+
 var express = require('express');
 var app = express();
 var cors = require('cors');
@@ -31,41 +32,70 @@ app.use(passport.session());
 app.use(morgan('dev'));
 
 const router = express.Router();
+const FB = express.Router();
 
 router.get('/', function(req, res){
-	res.json("Hello there");
+	res.render('index.ejs');
 });
 
 router.get('/login', function(req, res){
-	res.json('loginmessage');
+	res.render('login.ejs');
 });
 
 router.post('/login', passport.authenticate('local-login', {
     successRedirect : '/profile', // redirect to the secure profile section
     failureRedirect : '/login', // redirect back to the signup page if there is an error
-    failureFlash : true // allow flash messages
+    //failureFlash : true // allow flash messages
 }));
 
 router.get('/signup', function(req, res){
-	res.json('signupmessage');
+	res.render('signup.ejs');
 });
 
 router.post('/signup', passport.authenticate('local-signup', {
 	successRedirect: '/profile',
 	failureRedirect: '/signup',
+	//failureflash: true,
 }));
 
-router.get('/profile', function(req, res){
-	res.json("Hello there");
+router.get('/profile', isLoggedIn, function(req, res) {
+		res.render('profile.ejs', {
+			user : req.user
+		});
+	});;
+
+FB.get('/facebook', function(req, res){
+	res.render('facebook.ejs');
 });
 
-router.get('/logout', function(req, res){
-	// req.logout();
+FB.get('/', function(req, res){
+	res.render('facebook_profile.ejs', {user: req.user});
+});
+
+FB.get('/auth/facebook', passport.authenticate('facebook', {
+	scope: ['public_profile', 'email']
+});
+
+FB.get('/auth/facebook/callback', passport.authenticate('facebook', {
+	successRedirect: '/profile',
+	failureRedirect: ' ',
+}));
+
+FB.get('/logout', function(req, res){
+	req.logout();
 	res.redirect('/');
 });
 
+function isLoggedIn(req, res, next) {
+	if(req.isAuthenticated()) return next();
+	res.redirect('/');
+}
+
 app.use('/', router);
-passport.use('./', require('./config/passport'));
+app.use('/facebook', FB);
+// passport.use('./', require('./config/passport'));
+require('./config/passport')(passport);
+
 const hostname = 'localhost';
 const port = 8000;
 
@@ -77,5 +107,6 @@ const server = app.listen(port, hostname, () => {
     }
     console.log(`Server running at http://${hostname}:${port}/`);
   });
-  
+
 });
+

@@ -1,10 +1,10 @@
+<!-- views/signup.ejs -->
 <!doctype html>
 <html>
 <head>
     <title>Node Authentication</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> <!-- load bootstrap css -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"><!-- load fontawesome -->
     <style>
         body        { padding-top:80px; }
     </style>
@@ -15,13 +15,7 @@
 <div class="col-sm-6 col-sm-offset-3">
 
     <h1><span class="fa fa-sign-in"></span> Signup</h1>
-
-     <div class="alert alert-danger" id="msg"></div>
-    <!-- show any messages that come back with authentication -->
-    <!-- <% if (message.length > 0) { %>
-        <div class="alert alert-danger"><%= message %></div>
-    <% } %>
- -->
+    
     <!-- LOGIN FORM -->
     <form action="/signup" method="post">
         <div class="form-group">
@@ -42,23 +36,7 @@
     <p>Or go <a href="/">home</a>.</p>
 
 </div>
-    
+
 </div>
 </body>
-
-<script>
-
-    $.ajax({
-        type: 'GET',
-        url: 'http://localhost:8000/login',
-        dataType: 'json',
-    }).done(function(response){
-        console.log("Succesful");
-        $('#msg').text(response);
-
-    }).fail(function(err){
-        console.log(err)
-    });
-
-</script>
 </html>
