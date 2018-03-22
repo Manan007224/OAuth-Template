@@ -65,7 +65,7 @@ router.get('/profile', isLoggedIn, function(req, res) {
 	});;
 
 FB.get('/facebook', function(req, res){
-	res.render('facebook.ejs');
+	res.render('facebook_index.ejs');
 });
 
 FB.get('/', function(req, res){
